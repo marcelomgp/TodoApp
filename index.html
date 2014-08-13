@@ -11,25 +11,17 @@
     <section id="todoapp">
       <header id="header">
         <h1>Lista de Tarefas</h1>
-        <input type="text" id="new-todo" placeholder="Digite aqui para adicionar uma tarefa..." />
+        {{input type="text" id="new-todo" placeholder="Digite aqui para adicionar uma tarefa..." value=newName action="createTask"}}
       </header>
 
       <section id="main">
         <ul id="todo-list">
-          <li class="completed">
-            <input type="checkbox" class="toggle">
-            <label>Aprender Ember.js</label><button class="destroy"></button>
-          </li>
-
-          <li>
-            <input type="checkbox" class="toggle">
-            <label>...</label><button class="destroy"></button>
-          </li>
-
-          <li>
-            <input type="checkbox" class="toggle">
-            <label>Profit!</label><button class="destroy"></button>
-          </li>
+          {{#each itemController="todo"}}
+            <li {{bind-attr class="isCompleted:completed"}}>
+              {{input type="checkbox" checked=isCompleted class="toggle"}}
+              <label>{{name}}</label><button class="destroy"></button>
+            </li>
+          {{/each}}
         </ul>
 
         <input type="checkbox" id="toggle-all">
@@ -49,12 +41,12 @@
           </li>
 
           <li>
-            <a href="completed">Completadas</a>
+            <a href="completed">Concluídas</a>
           </li>
         </ul>
 
         <button id="clear-completed">
-          Limpar completadas (1)
+          Limpar concluídas (1)
         </button>
       </footer>
     </section>
@@ -65,11 +57,14 @@
 
   </script>
 
-  <script src="js/libs/jquery-1.10.2.min.js"></script>
-  <script src="js/libs/handlebars-1.0.0.js"></script>
-  <script src="js/libs/ember.js"></script>
-  <script src="js/libs/ember-data.js"></script>
+  <script src="http://emberjs.com.s3.amazonaws.com/getting-started/jquery.min.js"></script>
+  <script src="http://emberjs.com.s3.amazonaws.com/getting-started/handlebars.js"></script>
+  <script src="http://emberjs.com.s3.amazonaws.com/getting-started/ember.js"></script>
+  <script src="http://emberjs.com.s3.amazonaws.com/getting-started/ember-data.js"></script>
   <script src="js/application.js"></script>
   <script src="js/router.js"></script>
+  <script src="js/models/todo.js"></script>
+  <script src="js/controllers/todos_controller.js"></script>
+  <script src="js/controllers/todo_controller.js"></script>
   </body>
 </html>
