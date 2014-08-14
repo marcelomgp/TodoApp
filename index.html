@@ -6,48 +6,58 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+  <script type="text/x-handlebars" data-template-name="todos/index">
+   <ul id="todo-list">
+      {{#each itemController="todo"}}
+        <li {{bind-attr class="isCompleted:completed isEditing:editing"}}>
+          {{#if isEditing}}
+            {{edit-todo class="edit" value=name focus-out="acceptChanges" insert-newline="acceptChanges"}}
+          {{else}}
+            {{input type="checkbox" checked=isCompleted class="toggle"}}
+            <label {{action "editTask" on="doubleClick"}}>{{name}}</label><button {{action "removeTask"}} class="destroy"></button>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  </script>
+
   <script type="text/x-handlebars" data-template-name="todos">
 
     <section id="todoapp">
+
       <header id="header">
         <h1>Lista de Tarefas</h1>
         {{input type="text" id="new-todo" placeholder="Digite aqui para adicionar uma tarefa..." value=newName action="createTask"}}
       </header>
 
       <section id="main">
-        <ul id="todo-list">
-          {{#each itemController="todo"}}
-            <li {{bind-attr class="isCompleted:completed"}}>
-              {{input type="checkbox" checked=isCompleted class="toggle"}}
-              <label>{{name}}</label><button class="destroy"></button>
-            </li>
-          {{/each}}
-        </ul>
-
-        <input type="checkbox" id="toggle-all">
+        {{outlet}}
+        {{input type="checkbox" id="toggle-all" checked=allAreDone}}
       </section>
 
       <footer id="footer">
         <span id="todo-count">
-          <strong>2</strong> tarefas pendentes
+          <strong>{{remaining}}</strong> {{incompleteTasks}}
         </span>
         <ul id="filters">
           <li>
-            <a href="all" class="selected">Todas</a>
+            {{#link-to "todos.index" activeClass="selected"}}Todas{{/link-to}}
           </li>
 
           <li>
-            <a href="active">Pendentes</a>
+            {{#link-to "todos.active" activeClass="selected"}}Pendentes{{/link-to}}
           </li>
 
           <li>
-            <a href="completed">Concluídas</a>
+            {{#link-to "todos.complete" activeClass="selected"}}Concluídas{{/link-to}}
           </li>
         </ul>
 
-        <button id="clear-completed">
-          Limpar concluídas (1)
-        </button>
+        {{#if hasCompleted}}
+          <button id="clear-completed" {{action "clearCompleted"}}>
+            Limpar concluídas ({{completed}})
+          </button>
+        {{/if}}
       </footer>
     </section>
 
@@ -61,10 +71,12 @@
   <script src="http://emberjs.com.s3.amazonaws.com/getting-started/handlebars.js"></script>
   <script src="http://emberjs.com.s3.amazonaws.com/getting-started/ember.js"></script>
   <script src="http://emberjs.com.s3.amazonaws.com/getting-started/ember-data.js"></script>
+  <script src="http://emberjs.com.s3.amazonaws.com/getting-started/local_storage_adapter.js"></script>
   <script src="js/application.js"></script>
   <script src="js/router.js"></script>
   <script src="js/models/todo.js"></script>
   <script src="js/controllers/todos_controller.js"></script>
   <script src="js/controllers/todo_controller.js"></script>
+  <script src="js/views/edit_todo_view.js"></script>
   </body>
 </html>
